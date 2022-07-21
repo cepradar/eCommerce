@@ -1,12 +1,28 @@
 package com.example.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "detalles")
 public class DetalleOrden {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nombre;
     private double cantidad;
     private double precio;
     private double total;
 
+    @OneToOne
+    private Orden orden;
+
+    @OneToOne
+    private Producto producto;
 
     public DetalleOrden() {
     }
@@ -59,6 +75,24 @@ public class DetalleOrden {
     public void setTotal(double total) {
         this.total = total;
     }
+
+
+    public Orden getOrden() {
+        return this.orden;
+    }
+
+    public void setOrden(Orden orden) {
+        this.orden = orden;
+    }
+
+    public Producto getProducto() {
+        return this.producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+
 
     @Override
     public String toString() {
