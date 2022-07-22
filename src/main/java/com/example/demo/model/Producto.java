@@ -14,10 +14,10 @@ public class Producto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nombre;
-    private String precio;
+    private double precio;
     private String descripcion;
     private String imagen;
-    private String cantidad;
+    private int cantidad;
 
     @ManyToOne
     private Usuario usuario;
@@ -26,7 +26,7 @@ public class Producto {
     }
 
 
-    public Producto(Integer id, String nombre, String precio, String descripcion, String imagen, String cantidad, Usuario usuario) {
+    public Producto(Integer id, String nombre, double precio, String descripcion, String imagen, int cantidad, Usuario usuario) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
@@ -63,11 +63,11 @@ public class Producto {
         this.nombre = nombre;
     }
 
-    public String getPrecio() {
+    public double getPrecio() {
         return this.precio;
     }
 
-    public void setPrecio(String precio) {
+    public void setPrecio(double precio) {
         this.precio = precio;
     }
 
@@ -87,11 +87,11 @@ public class Producto {
         this.imagen = imagen;
     }
 
-    public String getCantidad() {
+    public int getCantidad() {
         return this.cantidad;
     }
 
-    public void setCantidad(String cantidad) {
+    public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
 
