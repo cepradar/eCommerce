@@ -1,15 +1,24 @@
 package com.example.demo.controller;
 
+import java.util.Optional;
+
+import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.example.demo.model.Producto;
 import com.example.demo.service.ProductoService;
 
 @Controller
 @RequestMapping("/")
 public class HomeController {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(HomeController.class);
 
     @Autowired
     private ProductoService productoService;
@@ -19,6 +28,22 @@ public class HomeController {
 
         model.addAttribute("productos", productoService.findAll());
         return "usuario/home";
+    }
+
+    @GetMapping("/productohome/{id}")
+    public String productoHome(@PathVariable Integer id, Model model) {
+        LOGGER.info("Id producto enviado como parámetro {}", id);
+        Producto producto = new Producto();
+        Optional<Producto> pOptional = productoService.get(id);
+        producto = pOptional.get();
+
+        model.addAttribute("producto", producto);
+        return "usuario/productohome";
+    }
+
+    @PostMapping("/cart")
+    public String addCart(){
+        return "usuario/carrito";
     }
 
 }
