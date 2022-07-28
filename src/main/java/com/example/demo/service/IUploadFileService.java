@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class UploadFileService {
+public class IUploadFileService {
     private String folder = "images//";
 
 
