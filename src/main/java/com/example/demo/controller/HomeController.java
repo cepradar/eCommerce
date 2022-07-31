@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -166,8 +168,21 @@ public class HomeController {
         orden = new Orden();
         detalles.clear();
 
-
         return "redirect:/";
+    }
+
+    @PostMapping("/buscar")
+    public String buscarProducto(@RequestParam String nombre,Model model){
+        LOGGER.info("nombre del producto: {}", nombre);
+        //obtiene todos los productos con findall, hace un stream hace un filter donde se usa una funcion anonima 'p' o de flecha trae el nombre del producto
+        //y con el metodo contains se pregunta si los productos contienen alguna parte de la secuencia de caracteres 'nombre' no los coloca y los devuelve con el metodo collect como una lista 
+        List<Producto> productos = productoService.findAll().stream().filter( p -> p.getNombre().contains(nombre)).collect(Collectors.toList());
+        
+        //revisar como colocar condicionales al predicado de stream().filter(->predicado<-)
+        //productos.addAll(productoService.findAll().stream().filter(p -> p.getDescripcion().contains(nombre)).collect(Collectors.toList()));
+        model.addAttribute("productos", productos);
+        
+        return "usuario/home";
     }
 
 }
