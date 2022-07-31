@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
+import java.lang.ProcessBuilder.Redirect;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +21,8 @@ import com.example.demo.model.Orden;
 import com.example.demo.model.Producto;
 import com.example.demo.model.Usuario;
 import com.example.demo.service.IUsuarioService;
+import com.example.demo.service.IDetalleOrdenService;
+import com.example.demo.service.IOrdenService;
 import com.example.demo.service.IProductoService;
 
 @Controller
@@ -32,6 +36,12 @@ public class HomeController {
 
     @Autowired
     private IUsuarioService usuarioService;
+
+    @Autowired
+    private IOrdenService ordenService;
+
+    @Autowired
+    private IDetalleOrdenService detalleOrdenService;
 
     List<DetalleOrden> detalles = new ArrayList<DetalleOrden>();
 
@@ -131,6 +141,33 @@ public class HomeController {
         model.addAttribute("Usuario", usuario);
 
         return "usuario/resumenorden";
+    }
+
+
+    @GetMapping("/saveOrder")
+    public String saveOrder(Model model){
+        Date fechaCreacion = new Date();
+        orden.setFechaCreacion(fechaCreacion);
+        orden.setNumero(ordenService.generarNumeroOrden());
+
+        //usuario
+        Usuario usuario = usuarioService.findByid(1).get();
+
+        orden.setUsuario(usuario);
+        ordenService.save(orden);
+
+        //guardar detalles
+        for(DetalleOrden dt: detalles){
+            dt.setOrden(orden);
+            detalleOrdenService.save(dt);
+        }
+
+        //limpiar lista y orden
+        orden = new Orden();
+        detalles.clear();
+
+
+        return "redirect:/";
     }
 
 }

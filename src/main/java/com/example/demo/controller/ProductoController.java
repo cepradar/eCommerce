@@ -16,8 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.model.Producto;
 import com.example.demo.model.Usuario;
-import com.example.demo.service.ProductoService;
-import com.example.demo.service.UploadFileService;
+import com.example.demo.service.IProductoService;
+import com.example.demo.service.IUploadFileService;
 
 @Controller
 @RequestMapping("/productos")
@@ -26,10 +26,10 @@ public class ProductoController {
     private final Logger LOGGER = LoggerFactory.getLogger(ProductoController.class);
 
     @Autowired
-    private ProductoService productoService;
+    private IProductoService productoService;
 
     @Autowired
-    private UploadFileService uFileService;
+    private IUploadFileService uFileService;
 
     @GetMapping("")
     public String show(Model model) {
