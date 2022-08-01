@@ -6,4 +6,5 @@ import com.example.demo.model.Usuario;
 
 public interface IUsuarioService {
     Optional<Usuario> findByid(Integer id);
+    Usuario save (Usuario usuario);
 }
