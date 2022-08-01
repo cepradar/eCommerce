@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import java.util.Optional;
+
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.demo.model.Usuario;
 import com.example.demo.service.IUsuarioService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/usuario")
@@ -38,5 +42,27 @@ public class UsuarioController {
     @GetMapping("/login")
     public String login(){
         return "usuario/login";
+    }
+
+    @PostMapping("/acceder")
+    public String acceder(Usuario usuario, HttpSession session){
+        LOGGER.info("Credenciales de acceso: {}", usuario);
+        Optional<Usuario> user = usuarioService.findByEmail(usuario.getEmail());
+        
+        //LOGGER.info("usuario obtenido: {}", user.get());
+        
+        if(user.isPresent()){
+            session.setAttribute("idUsuario", user.get().getId());
+            if(user.get().getTipo().equals("ADMIN")){
+                return "redirect:/administrador";
+            }else{
+                return "redirect:/";
+            }
+        }else{
+            LOGGER.info("usuario no existe");
+        }
+        //usuarioService.findByEmail(usuario.getEmail());
+
+        return "redirect:/";
     }
 }
