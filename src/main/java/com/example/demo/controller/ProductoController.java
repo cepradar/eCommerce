@@ -18,6 +18,9 @@ import com.example.demo.model.Producto;
 import com.example.demo.model.Usuario;
 import com.example.demo.service.IProductoService;
 import com.example.demo.service.IUploadFileService;
+import com.example.demo.service.IUsuarioService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/productos")
@@ -31,6 +34,9 @@ public class ProductoController {
     @Autowired
     private IUploadFileService uFileService;
 
+    @Autowired
+    private IUsuarioService usuarioService;
+
     @GetMapping("")
     public String show(Model model) {
         model.addAttribute("productos", productoService.findAll());
@@ -43,10 +49,12 @@ public class ProductoController {
     }
 
     @PostMapping("/save")
-    public String save(Producto producto, @RequestParam("img") MultipartFile file) throws IOException {
+    public String save(Producto producto, @RequestParam("img") MultipartFile file, HttpSession session) throws IOException {
         LOGGER.info("Este es el objeto producto{}", producto);
+        
+        
         // u = usuario de prueba
-        Usuario u = new Usuario(1, "", "", "", "", "", "", "");
+        Usuario u = usuarioService.findByid(Integer.parseInt(session.getAttribute("idUsuario").toString())).get();
         producto.setUsuario(u);
 
         // imagen
