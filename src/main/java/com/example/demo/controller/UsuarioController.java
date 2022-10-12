@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +30,8 @@ public class UsuarioController {
     @Autowired
     private IOrdenService ordenService;
 
+    BCryptPasswordEncoder passEncode = new BCryptPasswordEncoder();
+
     private final Logger LOGGER = LoggerFactory.getLogger(UsuarioController.class);
 
     //usuario/registro
@@ -42,6 +45,8 @@ public class UsuarioController {
     public String save(Usuario usuario){
         LOGGER.info("usuario registro: {}", usuario);
         usuario.setTipo("USER");
+        //encripta, modifica y guarda la contraseña del usuario
+        usuario.setPsw(passEncode.encode(usuario.getPsw()));
         usuarioService.save(usuario);
 
         return "redirect:/";
