@@ -40,8 +40,9 @@ public class UserDetailServiceImpl implements UserDetailsService{
             Usuario usuario = optionalUser.get();
             //return que genera el usuario y hace el match de la contraseña encriptada
             return User.builder().username(usuario.getNombre()).password(bCrypt.encode(usuario.getPsw())).roles(usuario.getTipo()).build();
+        }else{
+            throw new UsernameNotFoundException("usuario no encontrado");
         }
-        return null;
     }
     
 }
