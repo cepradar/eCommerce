@@ -33,13 +33,13 @@ public class UserDetailServiceImpl implements UserDetailsService{
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("Este es el username");
-        Optional<Usuario> optionalUser = usuarioService.findByEmail(username);
+        Optional<Usuario> optionalUser = usuarioService.findByid(Integer.parseInt(session.getAttribute("idusuario").toString()));
         if(optionalUser.isPresent()){
             log.info("Este es el id del usuario:{}", optionalUser.get().getId());
             session.setAttribute("idusuario", optionalUser.get().getId());
             Usuario usuario = optionalUser.get();
             //return que genera el usuario y hace el match de la contraseña encriptada
-            return User.builder().username(usuario.getNombre()).password(bCrypt.encode(usuario.getPsw())).roles(usuario.getTipo()).build();
+            return User.builder().username(usuario.getNombre()).password(usuario.getPsw()).roles(usuario.getTipo()).build();
         }else{
             throw new UsernameNotFoundException("usuario no encontrado");
         }
