@@ -60,7 +60,7 @@ public class UsuarioController {
     @GetMapping("/acceder")
     public String acceder(Usuario usuario, HttpSession session){
         LOGGER.info("Credenciales de acceso: {}", usuario);
-        Optional<Usuario> user = usuarioService.findByid(Integer.parseInt(session.getAttribute("idusuario").toString()));
+        Optional<Usuario> user = usuarioService.findByid(Integer.parseInt(session.getAttribute("idUsuario").toString()));
         
         LOGGER.info("usuario obtenido: {}", user.get());
         

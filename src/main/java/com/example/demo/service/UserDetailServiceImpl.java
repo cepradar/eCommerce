@@ -23,9 +23,6 @@ public class UserDetailServiceImpl implements UserDetailsService{
     private IUsuarioService usuarioService;
 
     @Autowired
-    private BCryptPasswordEncoder bCrypt;
-
-    @Autowired
     HttpSession session;
 
     private Logger log = LoggerFactory.getLogger(UserDetailServiceImpl.class);
@@ -33,10 +30,13 @@ public class UserDetailServiceImpl implements UserDetailsService{
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("Este es el username");
-        Optional<Usuario> optionalUser = usuarioService.findByid(Integer.parseInt(session.getAttribute("idusuario").toString()));
+        log.info("hasta aqui vamos bn");
+        Optional<Usuario> optionalUser = usuarioService.findByid(1);
         if(optionalUser.isPresent()){
             log.info("Este es el id del usuario:{}", optionalUser.get().getId());
-            session.setAttribute("idusuario", optionalUser.get().getId());
+            //log.info("Este es el idUsuario antes: {}", Integer.parseInt(session.getAttribute("idUsuario").toString()));
+            session.setAttribute("idUsuario", optionalUser.get().getId());
+            log.info("Este es el idUsuario despues: {}", Integer.parseInt(session.getAttribute("idUsuario").toString()));
             Usuario usuario = optionalUser.get();
             //return que genera el usuario y hace el match de la contraseña encriptada
             return User.builder().username(usuario.getNombre()).password(usuario.getPsw()).roles(usuario.getTipo()).build();
