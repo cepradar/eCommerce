@@ -60,12 +60,13 @@ public class UsuarioController {
     @GetMapping("/acceder")
     public String acceder(Usuario usuario, HttpSession session){
         LOGGER.info("Credenciales de acceso: {}", usuario);
-        Optional<Usuario> user = usuarioService.findByid(Integer.parseInt(session.getAttribute("idUsuario").toString()));
+        LOGGER.info("Credenciales de acceso: {}", session.getAttribute("idusuario"));
+        Optional<Usuario> user = usuarioService.findByid(Integer.parseInt(session.getAttribute("idusuario").toString()));
         
         LOGGER.info("usuario obtenido: {}", user.get());
         
         if(user.isPresent()){
-            session.setAttribute("idUsuario", user.get().getId());
+            session.setAttribute("idusuario", user.get().getId());
             if(user.get().getTipo().equals("ADMIN")){
                 return "redirect:/administrador";
             }else{
@@ -81,8 +82,8 @@ public class UsuarioController {
 
     @GetMapping("/compras")
     public String compras(HttpSession session, Model model){
-        model.addAttribute("sesion", session.getAttribute("idUsuario"));
-        Usuario usuario = usuarioService.findByid(Integer.parseInt(session.getAttribute("idUsuario").toString())).get();
+        model.addAttribute("sesion", session.getAttribute("idusuario"));
+        Usuario usuario = usuarioService.findByid(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
         List<Orden> ordenes = ordenService.findByUsuario(usuario);
 
         model.addAttribute("ordenes", ordenes);
@@ -91,7 +92,7 @@ public class UsuarioController {
 
     @GetMapping("/detalle/{id}")
     public String detalleCompra(@PathVariable Integer id, Model model, HttpSession session){
-        model.addAttribute("sesion", session.getAttribute("idUsuario"));
+        model.addAttribute("sesion", session.getAttribute("idusuario"));
         LOGGER.info("id de la orden: {}", id);
         Optional<Orden> orden = ordenService.findById(id);
          
@@ -102,7 +103,7 @@ public class UsuarioController {
 
     @GetMapping("/cerrar")
     public String cerrarSesion(HttpSession session){
-        session.removeAttribute("idUsuario");
+        session.removeAttribute("idusuario");
         return "redirect:/";
     }
 

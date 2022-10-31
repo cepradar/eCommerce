@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Usuario;
@@ -29,14 +28,11 @@ public class UserDetailServiceImpl implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("Este es el username");
-        log.info("hasta aqui vamos bn");
-        Optional<Usuario> optionalUser = usuarioService.findByid(1);
+        log.info("Este es el username{}", username);
+        Optional<Usuario> optionalUser = usuarioService.findByEmail(username);
         if(optionalUser.isPresent()){
             log.info("Este es el id del usuario:{}", optionalUser.get().getId());
-            //log.info("Este es el idUsuario antes: {}", Integer.parseInt(session.getAttribute("idUsuario").toString()));
-            session.setAttribute("idUsuario", optionalUser.get().getId());
-            log.info("Este es el idUsuario despues: {}", Integer.parseInt(session.getAttribute("idUsuario").toString()));
+            session.setAttribute("idusuario", optionalUser.get().getId());
             Usuario usuario = optionalUser.get();
             //return que genera el usuario y hace el match de la contraseña encriptada
             return User.builder().username(usuario.getNombre()).password(usuario.getPsw()).roles(usuario.getTipo()).build();
